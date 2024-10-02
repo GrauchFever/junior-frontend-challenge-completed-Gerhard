@@ -8,16 +8,42 @@ export const Todo = () => {
   const [e, setE] = useState(new Date());
   const [f, setF] = useState("");
   const [g, setG] = useState("low");
+  const [currentId, setCurrentId] = useState(null); // State to track which item is being updated
 
   const h = (i) => {
     i.preventDefault();
-    const j = [...a, { b, c, d, e, f, g }];
-    setA(j);
+    const newItem = { b, c, d, e, f, g };
+    if (currentId !== null) {
+      const updatedList = a.map((item, index) =>
+        index === currentId ? newItem : item
+      );
+      setA(updatedList);
+      setCurrentId(null); // Reset currentId after updating
+    } else {
+      const j = [...a, newItem];
+      setA(j);
+    }
     setB("");
     setC("");
     setE(new Date());
     setF("");
     setG("low");
+  };
+
+  const handleDelete = (index) => {
+    const newList = a.filter((_, i) => i !== index);
+    setA(newList);
+  };
+
+  const handleUpdate = (index) => {
+    const itemToUpdate = a[index];
+    setB(itemToUpdate.b);
+    setC(itemToUpdate.c);
+    setD(itemToUpdate.d);
+    setE(itemToUpdate.e);
+    setF(itemToUpdate.f);
+    setG(itemToUpdate.g);
+    setCurrentId(index); // Set the currentId to the index of the item being updated
   };
 
   return (
@@ -41,7 +67,7 @@ export const Todo = () => {
           <option value="medium">Medium</option>
           <option value="high">High</option>
         </select>
-        <button type="submit">Add</button>
+        <button type="submit">{currentId !== null ? "Update" : "Add"}</button>
       </form>
       <div>
         <h2>To-Do {a.filter((k) => k.d === "to-do").length}</h2>
@@ -55,6 +81,8 @@ export const Todo = () => {
               <p>{k.e.toString()}</p>
               <p>{k.f}</p>
               <p>{k.g}</p>
+              <button onClick={() => handleUpdate(l)}>Edit</button>
+              <button onClick={() => handleDelete(l)}>Delete</button>
             </div>
           ))}
       </div>
@@ -69,6 +97,8 @@ export const Todo = () => {
               <p>{k.e.toString()}</p>
               <p>{k.f}</p>
               <p>{k.g}</p>
+              <button onClick={() => handleUpdate(l)}>Edit</button>
+              <button onClick={() => handleDelete(l)}>Delete</button>
             </div>
           ))}
       </div>
@@ -83,6 +113,8 @@ export const Todo = () => {
               <p>{k.e.toString()}</p>
               <p>{k.f}</p>
               <p>{k.g}</p>
+              <button onClick={() => handleUpdate(l)}>Edit</button>
+              <button onClick={() => handleDelete(l)}>Delete</button>
             </div>
           ))}
       </div>
